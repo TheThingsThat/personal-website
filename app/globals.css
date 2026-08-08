@@ -1,0 +1,177 @@
+@import "tailwindcss";
+
+/* Dark mode is driven by data-theme on <html>, set before first paint by an
+   inline script in the root layout. Never keyed to prefers-color-scheme. */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* The palette. Softened on both ends — no pure black, no pure white. */
+:root {
+  --bg: #fdfdfc;
+  --fg: #2b2b28;
+  --muted: #6b6b66;
+  --rule: #e2e2dd;
+  --code-bg: #f4f3ee;
+}
+
+[data-theme="dark"] {
+  --bg: #1a1a18;
+  --fg: #d8d6d0;
+  --muted: #8f8d86;
+  --rule: #33332f;
+  --code-bg: #222220;
+}
+
+@theme inline {
+  /* Wipe Tailwind's default palette so utilities like text-gray-500 don't
+     exist — every color goes through the semantic tokens below, which flip
+     with the theme on their own (components never use dark: variants). */
+  --color-*: initial;
+  --color-bg: var(--bg);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-rule: var(--rule);
+  --color-code-bg: var(--code-bg);
+
+  /* Georgia for everything except code. To self-host a mono font later,
+     load it with next/font/local and change --font-mono only (see README). */
+  --font-serif: Georgia, "Times New Roman", serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+    "Liberation Mono", monospace;
+}
+
+@layer base {
+  html {
+    font-family: var(--font-serif);
+    background-color: var(--bg);
+    color: var(--fg);
+  }
+
+  body {
+    font-size: 1.125rem; /* 18px — body copy never below 16px */
+    line-height: 1.6;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    line-height: 1.2;
+    font-weight: 700;
+  }
+
+  a {
+    text-decoration-line: underline;
+    text-decoration-color: var(--muted);
+    text-underline-offset: 0.15em;
+  }
+
+  a:hover {
+    text-decoration-color: var(--fg);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--fg);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* Rendered MDX content. Hand-written instead of @tailwindcss/typography so
+   the type rules here stay the only opinion in play. */
+.prose > * + * {
+  margin-top: 1.25em;
+}
+
+.prose h2 {
+  font-size: 1.5rem;
+  margin-top: 2em;
+}
+
+.prose h3 {
+  font-size: 1.25rem;
+  margin-top: 1.75em;
+}
+
+.prose ul {
+  list-style: disc;
+  padding-left: 1.4em;
+}
+
+.prose ol {
+  list-style: decimal;
+  padding-left: 1.4em;
+}
+
+.prose li + li {
+  margin-top: 0.35em;
+}
+
+/* The blockquote rule marks structure (where the quote starts and ends),
+   not decoration. */
+.prose blockquote {
+  border-left: 2px solid var(--rule);
+  padding-left: 1.1em;
+  color: var(--muted);
+}
+
+.prose hr {
+  border: 0;
+  border-top: 1px solid var(--rule);
+  margin-top: 2.5em;
+  margin-bottom: 2.5em;
+}
+
+.prose code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  background-color: var(--code-bg);
+  padding: 0.15em 0.35em;
+  border-radius: 3px;
+}
+
+.prose pre {
+  background-color: var(--code-bg);
+  padding: 1rem 1.25rem;
+  border-radius: 4px;
+  overflow-x: auto;
+  line-height: 1.5;
+}
+
+/* em, not rem: scales against the 18px prose, not the 16px root. */
+.prose pre code {
+  background: none;
+  padding: 0;
+  font-size: 0.85em;
+  border-radius: 0;
+}
+
+.prose img,
+.prose video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Shiki emits both palettes as CSS variables on every token (defaultColor
+   off); these two rules choose the set that matches the active theme. The
+   block background stays our own --code-bg. */
+.shiki,
+.shiki span {
+  color: var(--shiki-light);
+}
+
+[data-theme="dark"] .shiki,
+[data-theme="dark"] .shiki span {
+  color: var(--shiki-dark);
+}

@@ -1,0 +1,43 @@
+---
+title: Writing by subtraction
+date: 2026-06-21
+type: essay
+summary: Most of my editing is deleting. An argument for treating prose the way you treat a pull request.
+tags: [writing, process]
+---
+
+The first draft of anything I write is too long. Not slightly too long — reliably, embarrassingly too long, the way a first attempt at a mechanism has twice the parts it needs. For years I treated this as a flaw to fix at the source. Write tighter! It never worked, and I have come to believe it cannot work: drafting and cutting are different activities, and trying to do both at once does both badly.
+
+So now I write the way I refactor. The draft is allowed to sprawl, because the draft is not the product. The product appears afterward, in an editing pass whose only move is deletion. No rephrasing, no rearranging — those are separate passes. The deletion pass asks one question of every sentence: *what breaks if this goes?* If the answer is nothing, it goes. It is astonishing how often the answer is nothing.
+
+The best statement of the principle is a century old, from Strunk's little book:
+
+> Omit needless words. Vigorous writing is concise. A sentence should contain no unnecessary words, a paragraph no unnecessary sentences, for the same reason that a drawing should have no unnecessary lines and a machine no unnecessary parts.
+
+Note what he does not say. He does not say make everything short. A machine has exactly the parts it needs — sometimes that is three, sometimes three hundred. The crime is not length; it is parts that do no work.
+
+## The mechanics
+
+In practice the deletion pass looks for three kinds of dead weight:
+
+- **Hedges.** "I think", "sort of", "in some sense". If the sentence is wrong, hedging does not make it less wrong; it makes it wrong *and* limp.
+- **Throat-clearing.** Any sentence whose job is to announce the next sentence. The reader is already here. Start.
+- **Duplicates.** The same claim, restated with different furniture. Keep whichever version is sharpest and delete the rest, the same way you would collapse two functions that differ only in variable names.
+
+The programming analogy is not decoration; it is genuinely how I hold the discipline in my head. When I review my own code, deleting a line feels like winning — `git diff --stat` with a minus sign is the best feeling in the trade. The same instinct transfers. An essay is a diff against silence, and silence was pretty good.
+
+```java
+// The editing loop, expressed in the language I write more of than English.
+public String edit(String draft) {
+    String previous;
+    do {
+        previous = draft;
+        draft = deleteNeedlessWords(draft);
+    } while (!draft.equals(previous)); // stop when nothing left to cut
+    return draft;
+}
+```
+
+The loop terminates, which is more than can be said for most advice about writing. When `deleteNeedlessWords` finds nothing to remove, you are done — not because the piece is perfect, but because further effort belongs to a different pass.
+
+This site is built on the same bet. There is a well-known [manifesto about web design](https://bettermotherfuckingwebsite.com/) whose entire argument is that the default page — text, links, nothing else — was already close to right, and that most of what we add subtracts. I find it hard to disagree in prose and harder in HTML. Delete until it breaks, then put the last thing back.

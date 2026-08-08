@@ -1,0 +1,46 @@
+---
+title: Turret PID control for FTC
+date: 2026-03-14
+type: code
+summary: A position controller for a shooter turret — feedforward, wraparound handling, and the tuning process.
+tags: [robotics, java, ftc]
+url: https://github.com/timtian/turret-pid
+---
+
+Our shooter turret needs to track a goal while the drivetrain moves underneath it. That means the controller can't just chase a setpoint — it has to reject the disturbance of the whole robot rotating. This is the controller we ran at regionals, plus the two bugs that cost us a match each.
+
+<Figure
+  src="/media/turret-figure.png"
+  alt="Placeholder diagram of the turret assembly and its axis of rotation"
+  width={1200}
+  height={800}
+  caption="Placeholder figure — the real post gets a labeled diagram of the turret gear train."
+/>
+
+The core is an ordinary PID with a velocity feedforward term from the drivetrain's measured yaw rate. The interesting part is the error calculation: a turret is circular, so the error between target and current angle must wrap to the shortest path.
+
+```java
+public class TurretController {
+    private final PIDCoefficients k;
+    private double integral = 0, lastError = 0;
+
+    public double update(double targetRad, double currentRad,
+                         double robotYawRateRadPerSec, double dt) {
+        // Wrap error to (-π, π] so the turret never takes the long way around.
+        double error = AngleUnit.normalizeRadians(targetRad - currentRad);
+
+        integral += error * dt;
+        double derivative = (error - lastError) / dt;
+        lastError = error;
+
+        // Feedforward cancels the robot's own rotation before PID sees it.
+        double ff = -robotYawRateRadPerSec * k.kV;
+
+        return k.p * error + k.i * integral + k.d * derivative + ff;
+    }
+}
+```
+
+Bug one: we integrated error *before* wrapping, so a target crossing the ±180° seam dumped a huge spike into the integral term and the turret wound up against its hard stop. Bug two: `dt` came from `System.nanoTime()` deltas but we reset the timer in a different method than we read it, so the first loop after enable saw a `dt` of several seconds and the derivative term kicked like a mule.
+
+Tuning order that worked: `kV` first with PID zeroed (drive in circles, watch the turret hold), then `p` until it oscillates, then `d` to kill the oscillation, and `i` last and reluctantly — with the feedforward doing its job, we ended up leaving `i` at zero.

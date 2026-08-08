@@ -1,0 +1,22 @@
+---
+title: Drivetrain friction, measured the dumb way
+date: 2026-07-18
+type: build
+summary: Tilt the field, raise one end until the robot slides, read the angle. A clip of the rig doing its thing.
+tags: [robotics, testing]
+---
+
+We wanted a number for drivetrain friction that didn't come from a datasheet. The dumb method: put the robot on a field tile, lift one end of the tile until the robot breaks loose, and read the angle off a phone inclinometer. The tangent of that angle is your coefficient of friction, no load cell required.
+
+<Clip
+  src="/media/drivetrain-test.mp4"
+  poster="/media/drivetrain-poster.png"
+  width={1280}
+  height={720}
+  autoPlay
+  caption="Placeholder clip — the real one shows the tile rig and the robot letting go at 31°."
+/>
+
+Three runs each on fresh tiles, worn tiles, and tiles with field dust gave us 0.61, 0.55, and 0.47. The spread between fresh and dusty is the interesting part — it's the difference between climbing the ramp and theatrically failing to, which is roughly how we found out during a scrimmage.
+
+The clip above is the placeholder demo for the `<Clip>` component: self-hosted file, `preload="metadata"`, poster frame, muted loop. Short silent footage that illustrates a mechanism belongs here; anything with narration belongs in a `<YouTube>` embed instead.
