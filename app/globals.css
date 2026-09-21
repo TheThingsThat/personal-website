@@ -4,21 +4,24 @@
    inline script in the root layout. Never keyed to prefers-color-scheme. */
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
-/* The palette. Softened on both ends — no pure black, no pure white. */
+/* The palette. Softened on both ends — no pure black, no pure white.
+   Backgrounds and rules sampled from jzhao.xyz (cream light / navy dark);
+   fg and muted are ours. code-bg sits LIGHTER than the cream page on
+   purpose: a darker cream tint drops Shiki's comment token below WCAG AA. */
 :root {
-  --bg: #fdfdfc;
+  --bg: #f5eedd;
   --fg: #2b2b28;
   --muted: #6b6b66;
-  --rule: #e2e2dd;
-  --code-bg: #f4f3ee;
+  --rule: #e3d9c0;
+  --code-bg: #faf6eb;
 }
 
 [data-theme="dark"] {
-  --bg: #1a1a18;
+  --bg: #06182f;
   --fg: #d8d6d0;
   --muted: #8f8d86;
-  --rule: #33332f;
-  --code-bg: #222220;
+  --rule: #122845;
+  --code-bg: #0d2440;
 }
 
 @theme inline {

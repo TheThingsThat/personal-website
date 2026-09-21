@@ -8,6 +8,10 @@ import "./globals.css";
    Light is the default — prefers-color-scheme is deliberately ignored. */
 const themeInit = `(function(){var t;try{t=localStorage.getItem("theme")}catch(e){}document.documentElement.dataset.theme=t==="dark"?"dark":"light"})()`;
 
+/* The wordmark in the top-left is the domain itself, derived from site.url
+   so changing domains updates it automatically. */
+const wordmark = new URL(site.url).hostname.replace(/^www\./, "");
+
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: { default: site.name, template: `%s · ${site.name}` },
@@ -44,32 +48,37 @@ export default function RootLayout({
         >
           Skip to content
         </a>
-        <div className="mx-auto flex min-h-dvh w-full max-w-[70ch] flex-col px-5">
-          <header className="flex items-baseline justify-between gap-4 pt-8 pb-14">
-            <Link prefetch={false} href="/" className="no-underline hover:underline">
-              {site.name}
+        <div className="mx-auto flex w-full max-w-[70ch] flex-col px-5 lg:max-w-[calc(70ch+14rem)] lg:flex-row lg:items-start lg:gap-14">
+          {/* Top bar on small screens; sticky left sidebar from lg up,
+              wordmark in the top-left, nav stacked beneath it. */}
+          <header className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 pt-8 pb-12 lg:sticky lg:top-0 lg:w-40 lg:shrink-0 lg:flex-col lg:items-start lg:gap-7 lg:pt-10 lg:pb-0">
+            <Link
+              prefetch={false}
+              href="/"
+              className="text-xl font-bold no-underline hover:underline lg:text-2xl"
+            >
+              {wordmark}
             </Link>
-            <nav className="flex items-baseline gap-5">
-              <Link prefetch={false}
+            <nav className="flex items-baseline gap-5 lg:flex-col lg:items-start lg:gap-2">
+              <Link
+                prefetch={false}
                 href="/about"
                 className="text-muted no-underline hover:text-fg hover:underline"
               >
                 about
               </Link>
+              <a
+                href="/rss.xml"
+                className="text-muted no-underline hover:text-fg hover:underline"
+              >
+                rss
+              </a>
               <ThemeToggle />
             </nav>
           </header>
-          <main id="main" className="flex-1">
+          <main id="main" className="w-full min-w-0 pb-16 lg:max-w-[70ch] lg:pt-10">
             {children}
           </main>
-          <footer className="pt-20 pb-8 text-base text-muted">
-            <a
-              href="/rss.xml"
-              className="no-underline hover:text-fg hover:underline"
-            >
-              rss
-            </a>
-          </footer>
         </div>
       </body>
     </html>
