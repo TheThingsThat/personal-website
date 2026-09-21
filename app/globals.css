@@ -5,9 +5,10 @@
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 /* The palette. Softened on both ends — no pure black, no pure white.
-   Backgrounds and rules sampled from jzhao.xyz (cream light / navy dark);
-   fg and muted are ours. code-bg sits LIGHTER than the cream page on
-   purpose: a darker cream tint drops Shiki's comment token below WCAG AA. */
+   Backgrounds, rules, and the dark text tones sampled from jzhao.xyz
+   (cream light / navy dark); light fg and muted are ours. code-bg sits
+   LIGHTER than the cream page on purpose: a darker cream tint drops
+   Shiki's comment token below WCAG AA. */
 :root {
   --bg: #f5eedd;
   --fg: #2b2b28;
@@ -18,8 +19,8 @@
 
 [data-theme="dark"] {
   --bg: #06182f;
-  --fg: #d8d6d0;
-  --muted: #8f8d86;
+  --fg: #caddf4;
+  --muted: #7191b8;
   --rule: #122845;
   --code-bg: #0d2440;
 }
